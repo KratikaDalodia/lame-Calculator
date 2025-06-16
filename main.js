@@ -34,19 +34,20 @@ let result;
 let operator;
 let isFirst = true;
 let justCalculated = false;
+let canBeOp = true;
 const display = document.querySelector(".display")
 const numbers = document.querySelectorAll(".keys")
 numbers.forEach((number) =>{
     number.addEventListener("click", () =>{
         let value = number.textContent
         if (!isNaN(value)) {
-            // if (justCalculated) {
-            //     a = value; 
-            //     display.textContent = a;
-            //     justCalculated = false;
-            //     isFirst = false;
-            //     return;
-            // }
+            if (justCalculated) {
+                a = value; 
+                display.textContent = a;
+                justCalculated = false;
+                isFirst = false;
+                return;
+            }
 
             if (isFirst) {
                 a = (a || "") + value;
@@ -57,12 +58,13 @@ numbers.forEach((number) =>{
                 display.textContent = b;
             }
         }
-
-        else if(value === "+" || value === "-" || value === "*" || value === "/"){
+        else if(value === "+" || value === "-" || value === "*" || value === "/" && canBeOp){
             operator = value;
             display.textContent = ""
+            canBeOp = false
         }
         else if(value === "="){
+            alert((parseInt(a)+" " +operator+ " "+parseInt(b)))
             result = operate(parseInt(a),operator,parseInt(b))
             display.textContent = result
             a = result
@@ -76,13 +78,10 @@ numbers.forEach((number) =>{
             a = null
             b = null
             result = null
+            isFirst = true;
         }
-        else if(value === "Del"){
-            let dis = display.textContent
-            display.textContent = dis.replace(dis[dis.length - 1],"")
-            if(a){
-                a.replace(a[a.length-1],"")
-            }
+        else{
+            alert("error")
         }
     })
 })
